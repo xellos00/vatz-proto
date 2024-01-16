@@ -4,10 +4,10 @@ package v1
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PluginClient interface {
-	Verify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VerifyInfo, error)
+	Verify(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*VerifyInfo, error)
 	Execute(ctx context.Context, in *ExecuteRequest, opts ...grpc.CallOption) (*ExecuteResponse, error)
 }
 
@@ -31,7 +31,7 @@ func NewPluginClient(cc grpc.ClientConnInterface) PluginClient {
 	return &pluginClient{cc}
 }
 
-func (c *pluginClient) Verify(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VerifyInfo, error) {
+func (c *pluginClient) Verify(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*VerifyInfo, error) {
 	out := new(VerifyInfo)
 	err := c.cc.Invoke(ctx, "/vatz.plugin.Plugin/verify", in, out, opts...)
 	if err != nil {
@@ -53,7 +53,7 @@ func (c *pluginClient) Execute(ctx context.Context, in *ExecuteRequest, opts ...
 // All implementations must embed UnimplementedPluginServer
 // for forward compatibility
 type PluginServer interface {
-	Verify(context.Context, *emptypb.Empty) (*VerifyInfo, error)
+	Verify(context.Context, *empty.Empty) (*VerifyInfo, error)
 	Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error)
 	mustEmbedUnimplementedPluginServer()
 }
@@ -62,7 +62,7 @@ type PluginServer interface {
 type UnimplementedPluginServer struct {
 }
 
-func (UnimplementedPluginServer) Verify(context.Context, *emptypb.Empty) (*VerifyInfo, error) {
+func (UnimplementedPluginServer) Verify(context.Context, *empty.Empty) (*VerifyInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Verify not implemented")
 }
 func (UnimplementedPluginServer) Execute(context.Context, *ExecuteRequest) (*ExecuteResponse, error) {
@@ -82,7 +82,7 @@ func RegisterPluginServer(s grpc.ServiceRegistrar, srv PluginServer) {
 }
 
 func _Plugin_Verify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(empty.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _Plugin_Verify_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/vatz.plugin.Plugin/verify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PluginServer).Verify(ctx, req.(*emptypb.Empty))
+		return srv.(PluginServer).Verify(ctx, req.(*empty.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
